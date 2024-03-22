@@ -72,16 +72,32 @@ public record Position(
         return new Position(row, column.moveRight(step));
     }
 
+    public boolean canMoveLeftUp() {
+        return canMoveLeft() && canMoveUp();
+    }
+
     public Position moveLeftUp() {
         return moveLeft().moveUp();
+    }
+
+    public boolean canMoveLeftDown() {
+        return canMoveLeft() && canMoveDown();
     }
 
     public Position moveLeftDown() {
         return moveLeft().moveDown();
     }
 
+    public boolean canMoveRightUp() {
+        return canMoveUp() && canMoveRight();
+    }
+
     public Position moveRightUp() {
         return moveRight().moveUp();
+    }
+
+    public boolean canMoveRightDown() {
+        return canMoveRight() && canMoveDown();
     }
 
     public Position moveRightDown() {

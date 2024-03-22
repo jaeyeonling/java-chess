@@ -21,4 +21,3 @@ public final class Blank extends Piece {
         throw new UnsupportedOperationException();
     }
 }
-
