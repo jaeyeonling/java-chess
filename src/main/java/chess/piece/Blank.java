@@ -1,6 +1,7 @@
 package chess.piece;
 
 import chess.Color;
+import chess.Movement;
 import chess.Position;
 
 import java.util.Set;
@@ -12,7 +13,12 @@ public final class Blank extends Piece {
     }
 
     @Override
-    public Set<Position> legalMovePositions(final Pieces pieces) {
+    protected Set<Position> legalMovePositions(final Movement movement, final Pieces pieces) {
+        return Set.of();
+    }
+
+    @Override
+    protected Set<Movement> movements() {
         return Set.of();
     }
 

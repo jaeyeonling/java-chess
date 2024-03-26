@@ -1,10 +1,9 @@
 package chess.piece;
 
 import chess.Color;
+import chess.Movement;
 import chess.Position;
-import chess.Row;
 
-import java.util.HashSet;
 import java.util.Set;
 
 /*
@@ -16,56 +15,37 @@ import java.util.Set;
 3-2. 대각선 -> 잡을 때 대각선 전진가능
 4. 뛰어넘을 수 없다 ->
  */
-public final class Pawn extends Piece {
-
-    private static final Row WHITE_START_LINE = Row.TWO;
-    private static final Row BLACK_START_LINE = Row.SEVEN;
-
+public sealed abstract class Pawn
+        extends Piece
+        permits WhitePawn, WhiteFirstPawn, BlackPawn, BlackFirstPawn {
     Pawn(final Color color, final Position position) {
         super(color, position);
     }
 
-    @Override
-    public Set<Position> legalMovePositions(final Pieces pieces) {
-        final var legalMovePositions = new HashSet<Position>();
-        if (color().isWhite()) {
-            if (position().row().equals(WHITE_START_LINE) &&
-                    pieces.isBlank(position().moveUp()) &&
-                    pieces.isBlank(position().moveUp(2))) {
-                legalMovePositions.add(position().moveUp(2));
-            }
-            if (position().canMoveUp() && pieces.isBlank(position().moveUp())) {
-                legalMovePositions.add(position().moveUp());
-            }
-            if (position().canMoveLeftUp() && pieces.matchColor(position().moveLeftUp(), oppositeColor())) {
-                legalMovePositions.add(position().moveLeftUp());
-            }
-            if (position().canMoveRightUp() && pieces.matchColor(position().moveRightUp(), oppositeColor())) {
-                legalMovePositions.add(position().moveRightUp());
-            }
-        }
-        if (color().isBlack()) {
-            if (position().row().equals(BLACK_START_LINE) && pieces.isBlank(position().moveDown(2))) {
-                legalMovePositions.add(position().moveDown(2));
-            }
-            if (position().canMoveDown() &&
-                    pieces.isBlank(position().moveDown()) &&
-                    pieces.isBlank(position().moveDown())) {
-                legalMovePositions.add(position().moveDown());
-            }
-            if (position().canMoveLeftDown() && pieces.matchColor(position().moveLeftDown(), oppositeColor())) {
-                legalMovePositions.add(position().moveLeftDown());
-            }
-            if (position().canMoveRightDown() && pieces.matchColor(position().moveRightDown(), oppositeColor())) {
-                legalMovePositions.add(position().moveRightDown());
-            }
-        }
+    protected abstract Set<Movement> movements();
 
-        return legalMovePositions;
+    @Override
+    protected Set<Position> legalMovePositions(final Movement movement, final Pieces pieces) {
+        if (canMoveDiagonal(movement, pieces) || canMoveVertical(movement, pieces)) {
+            return Set.of(position().move(movement));
+        }
+        return Set.of();
     }
 
-    @Override
-    protected Piece update(final Position destination) {
-        return new Pawn(color(), destination);
+    private boolean canMoveDiagonal(final Movement movement, final Pieces pieces) {
+        return movement.isDiagonal() &&
+                pieces.matchColor(position().move(movement), oppositeColor());
+    }
+
+    private boolean canMoveVertical(final Movement movement, final Pieces pieces) {
+        if (!movement.isVertical()) {
+            return false;
+        }
+        for (int i = 1; i <= movement.y(); i++) {
+            if (!position().canMoveVertical(i) || !pieces.isBlank(position().moveVertical(i))) {
+                return false;
+            }
+        }
+        return true;
     }
 }

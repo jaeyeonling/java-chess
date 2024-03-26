@@ -119,4 +119,52 @@ public record Position(
     public boolean isFarRight() {
         return column.isFarRight();
     }
+
+    public boolean canMove(final Movement movement) {
+        return canMoveVertical(movement.y()) && canMoveHorizontal(movement.x());
+    }
+
+    public boolean canMoveVertical(final int step) {
+        if (step > 0) {
+            return canMoveUp(step);
+        }
+        if (step < 0) {
+            return canMoveDown(-step);
+        }
+        return true;
+    }
+
+    public boolean canMoveHorizontal(final int step) {
+        if (step > 0) {
+            return canMoveRight(step);
+        }
+        if (step < 0) {
+            return canMoveLeft(-step);
+        }
+        return true;
+    }
+
+    public Position move(final Movement movement) {
+        return moveVertical(movement.y()).moveHorizontal(movement.x());
+    }
+
+    public Position moveVertical(final int step) {
+        if (step > 0) {
+            return moveUp(step);
+        }
+        if (step < 0) {
+            return moveDown(-step);
+        }
+        return this;
+    }
+
+    public Position moveHorizontal(final int step) {
+        if (step > 0) {
+            return moveRight(step);
+        }
+        if (step < 0) {
+            return moveLeft(-step);
+        }
+        return this;
+    }
 }

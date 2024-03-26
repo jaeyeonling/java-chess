@@ -68,6 +68,12 @@ class PositionTest {
         assertThat(A1.canMoveLeft()).isFalse();
     }
 
+    @DisplayName("A1은 왼쪽으로 이동할 수 없다.")
+    @Test
+    void canMoveLeft_Movement_A1() {
+        assertThat(A1.canMove(Movement.LEFT)).isFalse();
+    }
+
     @DisplayName("B1은 왼쪽으로 이동할 수 있다.")
     @Test
     void canMoveLeft_B1() {
@@ -114,6 +120,12 @@ class PositionTest {
     @Test
     void canMoveRight_H1() {
         assertThat(H1.canMoveRight()).isFalse();
+    }
+
+    @DisplayName("H1은 오른쪽으로 이동할 수 없다.")
+    @Test
+    void canMoveRight_Movement_H1() {
+        assertThat(H1.canMove(Movement.RIGHT)).isFalse();
     }
 
     @DisplayName("H1은 오른쪽으로 이동하면 예외가 발생한다.")
@@ -195,6 +207,14 @@ class PositionTest {
     @Test
     void moveUp_A7() {
         final var moved = A7.moveUp();
+
+        assertThat(moved).isEqualTo(A8);
+    }
+
+    @DisplayName("A7은 위로 이동하면 A8이다.")
+    @Test
+    void moveUp_Movement_A7() {
+        final var moved = A7.move(Movement.UP);
 
         assertThat(moved).isEqualTo(A8);
     }

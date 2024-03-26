@@ -1,12 +1,26 @@
 package chess.piece;
 
 import chess.Color;
+import chess.Movement;
 import chess.Position;
 
 import java.util.Set;
 
+import static java.util.stream.Collectors.toSet;
+
+/*
+Bishop
+Rook
+Queen
+
+Knight
+King
+
+Pawn
+ */
+
 public sealed abstract class Piece
-        permits Blank, King, Queen, Pawn, Rook, Knight, Bishop {
+        permits Blank, Pawn, SlidingPiece, JumpingPiece {
 
     private final Color color;
 
@@ -29,7 +43,16 @@ public sealed abstract class Piece
         return update(destination);
     }
 
-    protected abstract Set<Position> legalMovePositions(Pieces pieces);
+    public Set<Position> legalMovePositions(final Pieces pieces) {
+        return movements().stream()
+                .filter(movement -> position().canMove(movement))
+                .flatMap(movement -> legalMovePositions(movement, pieces).stream())
+                .collect(toSet());
+    }
+
+    protected abstract Set<Position> legalMovePositions(Movement movement, Pieces pieces);
+
+    protected abstract Set<Movement> movements();
 
     protected abstract Piece update(Position destination);
 

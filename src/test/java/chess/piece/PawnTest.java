@@ -1,6 +1,5 @@
 package chess.piece;
 
-import chess.Color;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -32,10 +31,10 @@ class PawnTest {
     @DisplayName("A2에 있을 경우 움직임을 검증한다.")
     @Test
     void legalMovePositions_a2() {
-        final var pawn = new Pawn(Color.WHITE, A2);
+        final var pawn = new WhiteFirstPawn(A2);
 
         final var legalMovePositions = pawn.legalMovePositions(new Pieces(
-                new Pawn(Color.BLACK, B3)
+                new BlackPawn(B3)
         ));
 
         final var upPositions = List.of(A3, A4, B3);
@@ -57,10 +56,10 @@ class PawnTest {
     @DisplayName("C3에 있을 경우 움직임을 검증한다.")
     @Test
     void legalMovePositions_c3() {
-        final var pawn = new Pawn(Color.WHITE, C3);
+        final var pawn = new WhitePawn(C3);
 
         final var legalMovePositions = pawn.legalMovePositions(new Pieces(
-                new Pawn(Color.BLACK, D4)
+                new BlackPawn(D4)
         ));
 
         final var upPositions = List.of(C4, D4);
@@ -82,10 +81,10 @@ class PawnTest {
     @DisplayName("H2에 있을 경우 움직임을 검증한다.")
     @Test
     void legalMovePositions_H2() {
-        final var pawn = new Pawn(Color.WHITE, H2);
+        final var pawn = new WhitePawn(H2);
 
         final var legalMovePositions = pawn.legalMovePositions(new Pieces(
-                new Pawn(Color.BLACK, H3)
+                new BlackPawn(H3)
         ));
 
         assertThat(legalMovePositions).isEmpty();
